@@ -3,6 +3,7 @@
  */
 package view;
 
+
 import controller.BallController;
 import controller.InGameController;
 import draw.Dragging;
@@ -12,6 +13,8 @@ import stages.Stage;
 import model.GameObject;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.ConditionalFeature;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -63,21 +66,17 @@ public class InGameScene extends Scene{
 	public InGameScene(Stage st) {
 		super(root);
 		root.setCache(true);
-		Image back = new Image("back.jpg");
+		Image back = new Image("file:images/back.jpg");
 		root.setBackground(new Background(new BackgroundImage(back, null, null, null,
 				new BackgroundSize(GameObject.SCREEN_WIDTH, GameObject.SCREEN_HEIGHT, false, false, true, true))));
 		
 		//Not the javafx stage
 		stage = st;
-		for (GameObject obj: stage.getWorldController().getObjects()) {
-			objects.getChildren().add(obj.gShape());
-			if (obj.isMain()) {
-				mainBall = (model.MainBall) obj;
-			}
-		}
-		drawer = new Drawer(this);
+		if (Platform.isSupported(ConditionalFeature.SCENE3D))
+			set3DScene();
+		else
+			set2DScene();
 		
-        
         Duration duration = Duration.seconds(1.0/60.0);      
         KeyFrame frame = new KeyFrame(duration, new InGameController(this, stage, tl), null,null);
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -95,9 +94,31 @@ public class InGameScene extends Scene{
 		menu = new InGameMenu(this);
 		menu.setVisible(false);
 		root.getChildren().add(menu);
-		mainBall.gShape().setOnMouseClicked(new BallController(mainBall));
+
 
 		timeline.playFromStart();
+	}
+	
+	public void set3DScene() {
+		for (GameObject obj: stage.getWorldController().getObjects()) {
+			objects.getChildren().add(obj.shape3D());
+			if (obj.isMain()) {
+				mainBall = (model.MainBall) obj;
+			}
+		}		
+		mainBall.shape3D().setOnMouseClicked(new BallController(mainBall));
+	}
+	
+	public void set2DScene() {
+		for (GameObject obj: stage.getWorldController().getObjects()) {
+			objects.getChildren().add(obj.shape2D());
+			if (obj.isMain()) {
+				mainBall = (model.MainBall) obj;
+			}
+		}
+		drawer = new Drawer(this);
+		
+		mainBall.shape2D().setOnMouseClicked(new BallController(mainBall));
 	}
 
 	public void won() {
@@ -130,7 +151,7 @@ public class InGameScene extends Scene{
 		ToggleGroup sideGroup = new ToggleGroup();
 		ToggleButton rectBut = new ToggleButton();
 
-		ImageView rectImg = new ImageView("rectangle.png");
+		ImageView rectImg = new ImageView("file:images/rectangle.png");
 		
 		rectImg.setFitHeight(44);
 		rectImg.setPreserveRatio(true);
@@ -142,7 +163,7 @@ public class InGameScene extends Scene{
 		
 		ToggleButton circBut = new ToggleButton();
 		
-		ImageView circImg = new ImageView("circle.png");
+		ImageView circImg = new ImageView("file:images/circle.png");
 		
 		circImg.setFitHeight(44);
 		circImg.setPreserveRatio(true);
@@ -164,7 +185,7 @@ public class InGameScene extends Scene{
 		gaming.getChildren().add(menuBut);
 		menuBut.relocate(GameObject.SCREEN_WIDTH-50, GameObject.SCREEN_HEIGHT-50);
 		menuBut.setShape(new Circle());
-		menuBut.setGraphic(new ImageView("gear.png"));
+		menuBut.setGraphic(new ImageView("file:images/gear.png"));
 		menuBut.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
@@ -181,12 +202,12 @@ public class InGameScene extends Scene{
 	}
 
 	public void restoreMain() {
-		objects.getChildren().remove(mainBall.gShape());
+		objects.getChildren().remove(mainBall.shape2D());
 		stage.addMainBall();
 		for (GameObject obj: stage.getWorldController().getObjects()) {
 			if (obj.isMain()){
 				mainBall = (model.MainBall) obj;
-				objects.getChildren().add(mainBall.gShape());
+				objects.getChildren().add(mainBall.shape2D());
 
 			}
 		}

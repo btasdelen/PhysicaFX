@@ -27,7 +27,7 @@ public class MainBall extends Circle implements Controllable {
 		radius = RADIUS;
 		pos = p;
 		isMain = true;
-		shape.setFill(new LinearGradient(0f, 1f, 1f, 0f, true, CycleMethod.NO_CYCLE, new
+		shape2D.setFill(new LinearGradient(0f, 1f, 1f, 0f, true, CycleMethod.NO_CYCLE, new
 				Stop[]{
 				new Stop(0, Color.web("#f8bd55")),
 				new Stop(0.14, Color.web("#c0fe56")),

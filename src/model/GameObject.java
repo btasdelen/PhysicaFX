@@ -19,7 +19,7 @@ import org.jbox2d.dynamics.FixtureDef;
  *
  */
 
-public class GameObject implements Drawable, Controllable{
+public class GameObject implements Controllable{
 	
 	
 	protected boolean isMain;
@@ -33,8 +33,9 @@ public class GameObject implements Drawable, Controllable{
     public final static int SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
     public final static int SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
 
-    protected javafx.scene.shape.Shape shape;
+    protected javafx.scene.shape.Shape shape2D;
     protected FixtureDef fd = new FixtureDef();
+	protected javafx.scene.shape.Shape3D shape3D;
     
     public GameObject(Vec2 p, Paint colour, BodyType t) {
     	super();
@@ -42,7 +43,7 @@ public class GameObject implements Drawable, Controllable{
     	pos = p;
     	this.colour = colour;
     	angle = 0;
-
+    	
     }
     
     public BodyDef getBodyDef() {
@@ -55,7 +56,7 @@ public class GameObject implements Drawable, Controllable{
     
     public void rotate(float ang) {
     	angle = ang;
-    	shape.setRotate(-(angle*180)/Math.PI);
+    	shape2D.setRotate(-(angle*180)/Math.PI);
     }
     
     
@@ -68,7 +69,7 @@ public class GameObject implements Drawable, Controllable{
     }
     
     public boolean isSelected(double x, double y) {
-    	if(shape.contains(x, y))
+    	if(shape2D.contains(x, y))
     		return true;
     	return false;
 	}
@@ -83,13 +84,17 @@ public class GameObject implements Drawable, Controllable{
     public boolean isMain() {
     	return isMain;
     }
- 
+    
     
     public Shape getShape() {return null;}
 
 
-	public javafx.scene.shape.Shape gShape(){
-		return shape;
+	public javafx.scene.shape.Shape shape2D(){
+		return shape2D;
+	}
+	
+	public javafx.scene.shape.Shape3D shape3D(){
+		return shape3D;
 	}
 	
 	public Paint getColour() {

@@ -16,7 +16,7 @@ import org.jbox2d.dynamics.FixtureDef;
  * @author bilal
  *
  */
-public class Circle extends GameObject implements Drawable {
+public class Circle extends GameObject {
     
     
     protected float radius;
@@ -38,15 +38,16 @@ public class Circle extends GameObject implements Drawable {
         fd.density = 0.8f;
         body = WorldPhysica.createBody(bd);
 		body.createFixture(fd);
-		shape = new javafx.scene.shape.Circle(boxToJavaX(pos.x),boxToJavaY(pos.y),radius );
-		shape.setFill(colour);
+		shape2D = new javafx.scene.shape.Circle(boxToJavaX(pos.x), boxToJavaY(pos.y), radius );
+		shape3D = new javafx.scene.shape.Sphere(radius);
+		shape2D.setFill(colour);
    
     }
 
     @Override
     public void setPos(Vec2 p) {
     	super.setPos(p);
-    	shape.relocate(boxToJavaX(p.x)-radius, boxToJavaY(p.y)-radius);
+    	shape2D.relocate(boxToJavaX(p.x)-radius, boxToJavaY(p.y)-radius);
 
     }
     
@@ -55,11 +56,6 @@ public class Circle extends GameObject implements Drawable {
     	return new CircleShape();
     }
 
-	@Override
-	public javafx.scene.shape.Shape gShape(){
-		//this is the shape that will be drawn
-		return shape;
-		
-	}
+
 	
 }

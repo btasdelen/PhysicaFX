@@ -15,7 +15,7 @@ public class Settings {
 	private static String fontName;
 	private static Font font;
 	private static int fontSize;
-	private static String graphics;
+	private static boolean is3D;
 	private static File file = new File("settings");
 
 	public Settings() throws IOException
@@ -34,11 +34,11 @@ public class Settings {
 	    fontName = str.substring(str.indexOf('[', str.indexOf("Font")) + 1, str.indexOf(']', str.indexOf("Font")));
 	    fontSize = Integer.parseInt(str.substring(str.indexOf('[', str.indexOf("FontSize")) + 1, str.indexOf(']', str.indexOf("FontSize"))));
 	    font = new Font(fontName, fontSize);
-	    if (str.substring(str.indexOf('[', str.indexOf("graphics")) + 1, str.indexOf(']', str.indexOf("AntiAlias"))).equals("2D")) {
-	    	graphics = "2D";
+	    if (str.substring(str.indexOf('[', str.indexOf("Graphics")) + 1, str.indexOf(']', str.indexOf("Graphics"))).equals("2D")) {
+	    	is3D = false;
 	    }
 	    else {
-	    	graphics = "3D";
+	    	is3D = true;
 	    }
 
 	}
@@ -55,12 +55,15 @@ public class Settings {
 	}
 	
 	public static void graphics(String g){
-		str = str.replace(graphics, g);
-		graphics = g;
+		if (is3D)
+			str = str.replace("3D", g);
+		else
+			str = str.replace("2D", g);
+			
 	}
 	
-	public static String graphics() {
-		return graphics;
+	public static boolean isGraphics3D() {
+		return is3D;
 	}
 	
 	public static void saveSettings() throws IOException {

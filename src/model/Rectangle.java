@@ -10,6 +10,7 @@ import org.jbox2d.collision.shapes.Shape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 
+
 /**
  * @author bilal
  *
@@ -41,8 +42,10 @@ public class Rectangle extends GameObject {
         fd.friction = 0.6f;
         fd.restitution = .2f;
 		body.createFixture(fd);
-		shape = new javafx.scene.shape.Rectangle(boxToJavaX(pos.x-javaToBoxWidth(width)),boxToJavaY(pos.y - javaToBoxHeight(length)), width, length);
-		shape.setFill(colour);
+		shape2D = new javafx.scene.shape.Rectangle(boxToJavaX(pos.x-javaToBoxWidth(width)),boxToJavaY(pos.y - javaToBoxHeight(length)), 
+				width, length);
+		shape2D.setFill(colour);
+		shape3D = new javafx.scene.shape.Box(width, length, 30);
 	}
 	
 	@Override
@@ -52,15 +55,7 @@ public class Rectangle extends GameObject {
 	@Override
     public void setPos(Vec2 p) {
     	super.setPos(p);
-    	shape.relocate(boxToJavaX(p.x)-width/2, boxToJavaY(p.y)-length/2);
+    	shape2D.relocate(boxToJavaX(p.x)-width/2, boxToJavaY(p.y)-length/2);
 
     }
-	
-	@Override
-	public javafx.scene.shape.Shape gShape() {
-
-		return shape;
-	}
-	
-
 }

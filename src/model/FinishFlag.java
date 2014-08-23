@@ -13,7 +13,7 @@ import org.jbox2d.common.Vec2;
  */
 public class FinishFlag extends GameObject {
 
-	private final ImageView iv = new ImageView("flag.png");
+	private final ImageView iv = new ImageView("file:images/flag.png");
 	
 	public FinishFlag(Vec2 p) throws Exception {
 		super(p, null, null);

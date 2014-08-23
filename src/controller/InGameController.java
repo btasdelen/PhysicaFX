@@ -84,7 +84,7 @@ public class InGameController implements EventHandler<ActionEvent> {
 		// add listeners to new main ball
 		if (isMainReplaced){
 			scene.restoreMain();
-			stage.getMainBall().gShape().setOnMouseClicked(new BallController(stage.getMainBall()));
+			stage.getMainBall().shape2D().setOnMouseClicked(new BallController(stage.getMainBall()));
 
 		}
 		// Checks finish condition		
