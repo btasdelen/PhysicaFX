@@ -5,7 +5,9 @@ package model;
 
 import java.awt.Toolkit;
 
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.paint.PhongMaterial;
 
 import org.jbox2d.collision.shapes.Shape;
 import org.jbox2d.common.Vec2;
@@ -21,7 +23,7 @@ import org.jbox2d.dynamics.FixtureDef;
 
 public class GameObject implements Controllable{
 	
-	
+	protected boolean is3D;
 	protected boolean isMain;
 	protected Vec2 pos;
 	protected float angle;
@@ -36,13 +38,16 @@ public class GameObject implements Controllable{
     protected javafx.scene.shape.Shape shape2D;
     protected FixtureDef fd = new FixtureDef();
 	protected javafx.scene.shape.Shape3D shape3D;
-    
+    protected PhongMaterial texture = new PhongMaterial();
+
     public GameObject(Vec2 p, Paint colour, BodyType t) {
     	super();
     	isMain = false;
     	pos = p;
     	this.colour = colour;
     	angle = 0;
+		texture.setDiffuseColor((Color) colour);
+
     	
     }
     
@@ -56,7 +61,10 @@ public class GameObject implements Controllable{
     
     public void rotate(float ang) {
     	angle = ang;
-    	shape2D.setRotate(-(angle*180)/Math.PI);
+    	if (is3D)
+        	shape3D.setRotate(-(angle*180)/Math.PI);
+    	else
+    		shape2D.setRotate(-(angle*180)/Math.PI);
     }
     
     
@@ -90,16 +98,19 @@ public class GameObject implements Controllable{
 
 
 	public javafx.scene.shape.Shape shape2D(){
+		is3D = false;
 		return shape2D;
 	}
 	
 	public javafx.scene.shape.Shape3D shape3D(){
+		is3D = true;
 		return shape3D;
 	}
 	
 	public Paint getColour() {
 		return colour;
 	}
+	
 	
 	//Convert a JBox2D x coordinate to a JavaFX pixel x coordinate
 	public static float boxToJavaX(float posX) {

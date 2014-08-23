@@ -45,7 +45,9 @@ public class Rectangle extends GameObject {
 		shape2D = new javafx.scene.shape.Rectangle(boxToJavaX(pos.x-javaToBoxWidth(width)),boxToJavaY(pos.y - javaToBoxHeight(length)), 
 				width, length);
 		shape2D.setFill(colour);
-		shape3D = new javafx.scene.shape.Box(width, length, 30);
+		shape3D = new javafx.scene.shape.Box(width, length, 50);
+		shape3D.setMaterial(texture);
+
 	}
 	
 	@Override
@@ -55,7 +57,10 @@ public class Rectangle extends GameObject {
 	@Override
     public void setPos(Vec2 p) {
     	super.setPos(p);
-    	shape2D.relocate(boxToJavaX(p.x)-width/2, boxToJavaY(p.y)-length/2);
+    	if (is3D)
+        	shape3D.relocate(boxToJavaX(p.x)-width/2, boxToJavaY(p.y)-length/2);
+    	else
+    		shape2D.relocate(boxToJavaX(p.x)-width/2, boxToJavaY(p.y)-length/2);
 
     }
 }

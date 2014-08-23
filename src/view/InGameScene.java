@@ -77,6 +77,8 @@ public class InGameScene extends Scene{
 		else
 			set2DScene();
 		
+		this.setCamera(new javafx.scene.PerspectiveCamera());
+		
         Duration duration = Duration.seconds(1.0/60.0);      
         KeyFrame frame = new KeyFrame(duration, new InGameController(this, stage, tl), null,null);
         timeline.setCycleCount(Timeline.INDEFINITE);

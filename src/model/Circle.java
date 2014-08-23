@@ -4,7 +4,6 @@
 package model;
 
 import javafx.scene.paint.Paint;
-
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.collision.shapes.Shape;
 import org.jbox2d.common.Vec2;
@@ -21,7 +20,7 @@ public class Circle extends GameObject {
     
     protected float radius;
     protected static CircleShape cs;
-    	
+    
     public Circle(Vec2 p, float radius, Paint color, BodyType t){
     	super(p , color, t);
     	this.radius = radius;
@@ -41,13 +40,17 @@ public class Circle extends GameObject {
 		shape2D = new javafx.scene.shape.Circle(boxToJavaX(pos.x), boxToJavaY(pos.y), radius );
 		shape3D = new javafx.scene.shape.Sphere(radius);
 		shape2D.setFill(colour);
+		shape3D.setMaterial(texture);
    
     }
 
     @Override
     public void setPos(Vec2 p) {
     	super.setPos(p);
-    	shape2D.relocate(boxToJavaX(p.x)-radius, boxToJavaY(p.y)-radius);
+    	if (is3D)
+        	shape3D.relocate(boxToJavaX(p.x)-radius, boxToJavaY(p.y)-radius);
+    	else
+    		shape2D.relocate(boxToJavaX(p.x)-radius, boxToJavaY(p.y)-radius);
 
     }
     
