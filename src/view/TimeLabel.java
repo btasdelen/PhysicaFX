@@ -15,13 +15,12 @@ import javafx.scene.text.Font;
  */
 public class TimeLabel extends Label {
 	boolean isPaused;
-	Font font = new Font("Ubuntu", 40);
+	Font font = new Font(50);
 	public TimeLabel() {
 		super("0:00");
 
-		relocate((GameObject.SCREEN_WIDTH/100)*95, (GameObject.SCREEN_HEIGHT/30));
+		relocate(GameObject.SCREEN_WIDTH - 170, 40);
 		isPaused = false;
-		//setFont(model.Settings.getFont());
 		setFont(font);
 		setTextFill(Color.ANTIQUEWHITE);
 	

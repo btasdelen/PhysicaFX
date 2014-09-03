@@ -4,7 +4,7 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import stages.Stage;
-import view.InGameScene;
+import view.InGamePane;
 import view.TimeLabel;
 import model.GameObject;
 
@@ -15,7 +15,7 @@ import model.GameObject;
 
 public class InGameController implements EventHandler<ActionEvent> {
 	
-	private InGameScene scene;
+	private InGamePane scene;
 	private Stage stage;
 	private TimeLabel view;
 	private int min;
@@ -24,8 +24,9 @@ public class InGameController implements EventHandler<ActionEvent> {
 	private float timeStep = 1.0f / 60.f;
 	private int velocityIterations = 8;
 	private int positionIterations = 3;
+	private boolean isWon = false;
 
-	public InGameController(InGameScene inGameScene, Stage st, TimeLabel view)
+	public InGameController(InGamePane inGameScene, Stage st, TimeLabel view)
 	{
 		stage = st;
 		this.scene = inGameScene;
@@ -35,15 +36,6 @@ public class InGameController implements EventHandler<ActionEvent> {
 		ms = 0;
 	}
 	
-	// Add object
-	public void addObject(GameObject obj)
-	{
-		stage.getWorldController();
-		WorldController.addObject(obj);
-	}
-	
-
-
 	
 	public void incrementTime() {
 		//increment second and then check if necessary to increment label
@@ -80,16 +72,16 @@ public class InGameController implements EventHandler<ActionEvent> {
 		}
 		
 		// Destroy objects outside of the screen
-		stage.destroyOutside();
+		destroyOutside();
 		// add listeners to new main ball
 		if (isMainReplaced){
 			scene.restoreMain();
-			stage.getMainBall().shape2D().setOnMouseClicked(new BallController(stage.getMainBall()));
 
 		}
 		// Checks finish condition		
-		if(stage.getFlag().isFinished(stage.getMainBall().getPos())){
+		if(stage.getFlag().isFinished(stage.getMainBall()) && !isWon){
 			scene.won();
+			isWon = true;
 		}
 		
 		// Checks if main ball captured by launcher
@@ -103,6 +95,17 @@ public class InGameController implements EventHandler<ActionEvent> {
 		if( !view.isPaused()) {
 			incrementTime();
 			view.setTime(min, sec);
+		}
+	}
+	
+	public void destroyOutside() {
+		//destroy the object when it is outside of the screen
+		for (int i = 0; i < stage.getWorldController().getObjects().size(); i++){
+			if (!stage.getWorldController().getObjects().get(i).isInside()){
+				scene.removeObject(stage.getWorldController().getObjects().get(i));
+				stage.getWorldController().getWorld().destroyBody(stage.getWorldController().getObjects().get(i).body);
+				WorldController.deleteObject(stage.getWorldController().getObjects().get(i));
+			}
 		}
 	}
 

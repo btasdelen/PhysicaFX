@@ -55,16 +55,6 @@ public class Stage {
 		
 	}
 	
-	public void destroyOutside() {
-		//destroy the object when it is outside of the screen
-		for (int i = 0; i < world.getObjects().size(); i++){
-			if (!world.getObjects().get(i).isInside()){
-				world.getWorld().destroyBody(world.getObjects().get(i).body);
-				WorldController.deleteObject(world.getObjects().get(i));
-			}
-		}
-	}
-	
 	public void keepInside(MainBall mb) {
 		if (!mb.isInside()) {
 			world.getWorld().destroyBody(mb.body);

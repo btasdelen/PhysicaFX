@@ -5,7 +5,6 @@ package model;
 
 import javafx.scene.paint.Paint;
 import org.jbox2d.collision.shapes.CircleShape;
-import org.jbox2d.collision.shapes.Shape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
@@ -25,7 +24,7 @@ public class Circle extends GameObject {
     	super(p , color, t);
     	this.radius = radius;
     	cs = new CircleShape();
-        cs.m_radius = javaToBoxRadius(radius);  //We need to convert radius to JBox2D equivalent
+        cs.m_radius = radius;  //We need to convert radius to JBox2D equivalent
     	bd.type = t;
         bd.position.set(pos.x, pos.y);
         
@@ -37,28 +36,35 @@ public class Circle extends GameObject {
         fd.density = 0.8f;
         body = WorldPhysica.createBody(bd);
 		body.createFixture(fd);
-		shape2D = new javafx.scene.shape.Circle(boxToJavaX(pos.x), boxToJavaY(pos.y), radius );
-		shape3D = new javafx.scene.shape.Sphere(radius);
-		shape2D.setFill(colour);
-		shape3D.setMaterial(texture);
-   
+		if (Settings.isGraphics3D()) {
+			shape3D = new javafx.scene.shape.Sphere(boxToJavaRadius(radius));
+			shape3D.setMaterial(texture);
+			shape3D.setTranslateZ(-90);
+		}
+
+		else {
+			shape2D = new javafx.scene.shape.Circle(boxToJavaX(pos.x), boxToJavaY(pos.y), boxToJavaRadius(radius) );
+			shape2D.setFill(colour);
+		}
+    }
+    
+    @Override
+    public boolean isSelected(double x, double y) {
+    
+    	if (Math.sqrt(Math.pow(x - boxToJavaX(pos.x), 2) + Math.pow(y - boxToJavaY(pos.y), 2)) <= boxToJavaRadius(radius)) {
+			return true;
+    	}
+    	return false;
     }
 
     @Override
     public void setPos(Vec2 p) {
     	super.setPos(p);
-    	if (is3D)
-        	shape3D.relocate(boxToJavaX(p.x)-radius, boxToJavaY(p.y)-radius);
+    	if (Settings.isGraphics3D())
+        	shape3D.relocate(boxToJavaX(p.x)-boxToJavaRadius(radius), boxToJavaY(p.y)-boxToJavaRadius(radius));
     	else
-    		shape2D.relocate(boxToJavaX(p.x)-radius, boxToJavaY(p.y)-radius);
+    		shape2D.relocate(boxToJavaX(p.x)-boxToJavaRadius(radius), boxToJavaY(p.y)-boxToJavaRadius(radius));
 
     }
-    
-    @Override
-    public Shape getShape() {
-    	return new CircleShape();
-    }
-
-
 	
 }

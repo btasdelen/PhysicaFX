@@ -5,7 +5,9 @@ package stages;
 
 import javafx.scene.paint.Color;
 import model.Circle;
+import model.GroundRect;
 import model.Rectangle;
+
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 
@@ -17,7 +19,6 @@ import controller.WorldController;
  */
 public class StageOne extends Stage {
 	
-
 
 	private Rectangle rect;
 	private Rectangle rect2;
@@ -31,19 +32,20 @@ public class StageOne extends Stage {
 		
 		addMainBall();
 
-		ff.setPos(new Vec2(1300 ,577));
+		ff.setPos(new Vec2(85 , 57));
 
 
-		cr = new Circle(new Vec2(55, 50), 30, Color.CYAN, BodyType.STATIC);
-		rect = new Rectangle(new Vec2(25, 50), 600, 15, Color.GRAY, BodyType.STATIC);
-		rect3= new Rectangle(new Vec2(85, 50), 600, 15, Color.GRAY,  BodyType.STATIC);
+		cr = new Circle(new Vec2(50, 50), 2, Color.CYAN, BodyType.STATIC);
+		rect = new GroundRect(new Vec2(20, 50), 15, 0.5f);
+		rect3= new GroundRect(new Vec2(75, 50), 15, 0.5f);
 
-		rect2 = new Rectangle(new Vec2(54, 51), 600, 5, Color.GREEN, BodyType.DYNAMIC);
+		rect2 = new Rectangle(new Vec2(49, 51), 15, 0.1f, Color.GREEN, BodyType.DYNAMIC);
 
 		WorldController.addObject(cr);
 		WorldController.addObject(rect);
 		WorldController.addObject(rect2);
 		WorldController.addObject(rect3);
+
 
 
 

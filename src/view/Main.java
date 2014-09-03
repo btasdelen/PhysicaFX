@@ -1,26 +1,41 @@
 package view;
 
-import stages.StageOne;
+import java.io.IOException;
+
+import model.Settings;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 	
-	Stage stage;
-	Scene current = new InGameScene(new StageOne());
+	static Stage stage;
+	{
+		try {
+			Settings.readSettings();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 	
-	public void setScene(Scene scn) {
+	static Scene current = new Menu();//new InGameScene(new StageOne());
+
+	
+	public static void setScene(Scene scn) {
 		current = scn;
-		stage.setScene(current);
+		//stage.setScene(current);
+		//stage.setFullScreen(true);
+
 
 	}
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
 		stage = primaryStage;
 		stage.setFullScreen(true);
-		stage.setFullScreenExitHint("");
+		stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 		stage.setTitle("Physica");
 		stage.setScene(current);
 		stage.show();

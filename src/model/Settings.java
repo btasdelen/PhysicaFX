@@ -17,9 +17,8 @@ public class Settings {
 	private static int fontSize;
 	private static boolean is3D;
 	private static File file = new File("settings");
-
-	public Settings() throws IOException
-	{
+	
+	public static void readSettings() throws IOException {
 		
 		Reader reader = new FileReader(file);
 
@@ -34,12 +33,16 @@ public class Settings {
 	    fontName = str.substring(str.indexOf('[', str.indexOf("Font")) + 1, str.indexOf(']', str.indexOf("Font")));
 	    fontSize = Integer.parseInt(str.substring(str.indexOf('[', str.indexOf("FontSize")) + 1, str.indexOf(']', str.indexOf("FontSize"))));
 	    font = new Font(fontName, fontSize);
+	    
 	    if (str.substring(str.indexOf('[', str.indexOf("Graphics")) + 1, str.indexOf(']', str.indexOf("Graphics"))).equals("2D")) {
 	    	is3D = false;
+
 	    }
 	    else {
 	    	is3D = true;
+
 	    }
+		System.out.println(is3D);
 
 	}
 	

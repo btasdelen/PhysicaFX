@@ -24,7 +24,7 @@ public class Rectangle extends GameObject {
 	
 	protected PolygonShape rs;
 	
-	protected float DEPTH = 10;
+	protected final float DEPTH = 100;
 	
 	public Rectangle(Vec2 p, float w, float l, Paint colour, BodyType t) {
 		super(p, colour, t);
@@ -32,7 +32,7 @@ public class Rectangle extends GameObject {
 		width = w;
 		length = l;
 		rs = new PolygonShape();
-		rs.setAsBox(javaToBoxWidth(width), javaToBoxHeight(length));
+		rs.setAsBox(width, length);
 		bd.type = t;
         bd.position.set(pos.x, pos.y);
         body = WorldPhysica.getWorld().createBody(bd);
@@ -42,11 +42,18 @@ public class Rectangle extends GameObject {
         fd.friction = 0.6f;
         fd.restitution = .2f;
 		body.createFixture(fd);
-		shape2D = new javafx.scene.shape.Rectangle(boxToJavaX(pos.x-javaToBoxWidth(width)),boxToJavaY(pos.y - javaToBoxHeight(length)), 
-				width, length);
-		shape2D.setFill(colour);
-		shape3D = new javafx.scene.shape.Box(width, length, 50);
-		shape3D.setMaterial(texture);
+		if (Settings.isGraphics3D()) {
+			shape3D = new javafx.scene.shape.Box(boxToJavaDistance(width), boxToJavaDistance(length), DEPTH);
+			shape3D.setTranslateZ(-100);
+			shape3D.setMaterial(texture);
+		}
+		
+		else {
+			shape2D = new javafx.scene.shape.Rectangle(boxToJavaX(pos.x-width),boxToJavaY(pos.y - length), 
+					boxToJavaDistance(width), boxToJavaDistance(length));
+			shape2D.setFill(colour);
+		}
+		
 
 	}
 	
@@ -57,10 +64,20 @@ public class Rectangle extends GameObject {
 	@Override
     public void setPos(Vec2 p) {
     	super.setPos(p);
-    	if (is3D)
-        	shape3D.relocate(boxToJavaX(p.x)-width/2, boxToJavaY(p.y)-length/2);
+    	if (Settings.isGraphics3D())
+        	shape3D.relocate(boxToJavaX(p.x - width), boxToJavaY(p.y + length));
     	else
-    		shape2D.relocate(boxToJavaX(p.x)-width/2, boxToJavaY(p.y)-length/2);
+    		shape2D.relocate(boxToJavaX(p.x - width), boxToJavaY(p.y + length));
 
     }
+
+	@Override
+	public boolean isSelected(double x, double y) {
+
+		if ( (Math.abs(x - boxToJavaX(pos.x)) <= boxToJavaDistance(width)/2 )
+			&&	(Math.abs(y - boxToJavaX(pos.y)) <= boxToJavaDistance(length))) {
+			return true;
+		}
+		return false;
+	}
 }

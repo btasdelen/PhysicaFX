@@ -32,4 +32,10 @@ public class Launcher extends GameObject {
 			return true;
 		return false;
 	}
+
+	@Override
+	public boolean isSelected(double x, double y) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

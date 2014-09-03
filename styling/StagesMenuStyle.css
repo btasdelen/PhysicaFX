@@ -1,0 +1,6 @@
+.root {
+	-fx-background-image: url("../images/stagesmenu.jpg");
+	-fx-background-position: center;
+	-fx-background-repeat: stretch;
+	-fx-background-size: stretch;
+}

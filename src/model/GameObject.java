@@ -23,7 +23,6 @@ import org.jbox2d.dynamics.FixtureDef;
 
 public class GameObject implements Controllable{
 	
-	protected boolean is3D;
 	protected boolean isMain;
 	protected Vec2 pos;
 	protected float angle;
@@ -31,9 +30,10 @@ public class GameObject implements Controllable{
     protected BodyType type;
     protected BodyDef bd = new BodyDef();
     public Body body;
-    protected final static int RATIO = Toolkit.getDefaultToolkit().getScreenSize().width;
     public final static int SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
     public final static int SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
+    protected final static int RATIO = SCREEN_WIDTH;
+
 
     protected javafx.scene.shape.Shape shape2D;
     protected FixtureDef fd = new FixtureDef();
@@ -61,7 +61,7 @@ public class GameObject implements Controllable{
     
     public void rotate(float ang) {
     	angle = ang;
-    	if (is3D)
+    	if (Settings.isGraphics3D())
         	shape3D.setRotate(-(angle*180)/Math.PI);
     	else
     		shape2D.setRotate(-(angle*180)/Math.PI);
@@ -77,8 +77,14 @@ public class GameObject implements Controllable{
     }
     
     public boolean isSelected(double x, double y) {
-    	if(shape2D.contains(x, y))
-    		return true;
+    	if (Settings.isGraphics3D()) {
+    		if(shape3D.contains(x, y))
+        		return true;
+    	}
+    	else {
+    		if(shape2D.contains(x, y))
+    			return true;
+    	}
     	return false;
 	}
     
@@ -98,12 +104,10 @@ public class GameObject implements Controllable{
 
 
 	public javafx.scene.shape.Shape shape2D(){
-		is3D = false;
 		return shape2D;
 	}
 	
 	public javafx.scene.shape.Shape3D shape3D(){
-		is3D = true;
 		return shape3D;
 	}
 	
@@ -114,19 +118,19 @@ public class GameObject implements Controllable{
 	
 	//Convert a JBox2D x coordinate to a JavaFX pixel x coordinate
 	public static float boxToJavaX(float posX) {
-	    float x = RATIO*posX / 100.0f;
+	    float x = RATIO * posX / 100.0f;
 	    return x;
 	}
 	 
 	//Convert a JavaFX pixel x coordinate to a JBox2D x coordinate
 	public static float javaToBoxX(float posX) {
-	    float x =   (posX*100.0f)/RATIO;
+	    float x = (posX * 100.0f)/RATIO;
 	    return x;
 	}
 	 
 	//Convert a JBox2D y coordinate to a JavaFX pixel y coordinate
 	public static float boxToJavaY(float posY) {
-	    float y = RATIO - 1.0f*RATIO * posY / 100.0f;
+	    float y = RATIO - 1f*RATIO * posY / 100.0f;
 	    return y;
 	}
 	 
@@ -150,6 +154,17 @@ public class GameObject implements Controllable{
 	public static float javaToBoxRadius(float radius) {
 		return 100.f*radius/(RATIO);
 	}
+	
+	//Convert a pixel height to JBox2D height
+	public static float boxToJavaDistance(float dist) {
+	    return (RATIO * 2 * dist)/100f;
+	}
+	
+	//Convert a pixel radius to JBox2D radius
+	public static float boxToJavaRadius(float radius) {
+		return (radius * RATIO) / 100f;
+	}
+
 
 
 }
