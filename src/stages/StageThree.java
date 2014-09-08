@@ -3,14 +3,11 @@
  */
 package stages;
 
-import javafx.scene.paint.Color;
-
+import model.GroundRect;
 import model.Launcher;
 import model.Rectangle;
 
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.BodyType;
-
 import controller.WorldController;
 
 /**
@@ -23,30 +20,25 @@ public class StageThree extends Stage {
 	private Rectangle rect;
 	public StageThree() {
 		super(new Vec2(25, 70));
-		
-		//setMainBallPos();
+
+	}
+	
+	@Override
+	public void setupStage() {
+		super.setupStage();
+
 		addMainBall();
 
-		ff.setPos(new Vec2(95 ,56.5f));
+		ff.setPos(new Vec2(90 ,56.5f));
+		launcher = new Launcher(new Vec2(40, 55));
 
-		try {
-			haveLauncher = new Launcher(new Vec2(30, 55));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		rect = new Rectangle(new Vec2(25, 50), 600, 15, Color.GRAY, BodyType.STATIC);
+		rect = new GroundRect(new Vec2(25, 50), 20, 1);
 
 
 
 		WorldController.addObject(rect);
 
-
-
-
-
 	}
-	
 
 
 }

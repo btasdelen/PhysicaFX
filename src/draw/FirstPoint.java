@@ -22,10 +22,9 @@ public class FirstPoint implements EventHandler<MouseEvent> {
 	private static boolean valid = false;
 	private static boolean isPaused = false;
 	
-	public FirstPoint(Stage stg, Drawer draw) {
+	public FirstPoint(Stage stg) {
 		super();
 		this.stg = stg;
-		//drawer = draw;
 	}
 	
 	@Override

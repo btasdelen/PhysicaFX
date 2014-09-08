@@ -17,7 +17,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.ConditionalFeature;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.PointLight;
@@ -27,7 +26,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.GaussianBlur;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -49,11 +47,10 @@ public class InGamePane extends Pane{
 	
 	model.MainBall mainBall;
 	private Stage stage;
-	//private static Pane this = new Pane();
-	private static Pane gaming = new Pane();
+	private Pane gaming = new Pane();
 	Group objects = new Group();
 	private TimeLabel tl = new TimeLabel();
-	private final static GridPane sp = new GridPane();
+	private final GridPane sp = new GridPane();
 	private final Button menuBut = new Button();
 	public static final Border border = new Border(new BorderStroke(Color.CORNFLOWERBLUE, 
 			new BorderStrokeStyle(null, StrokeLineJoin.ROUND, null, 10, 0, null),
@@ -68,8 +65,6 @@ public class InGamePane extends Pane{
 
 	
 	public InGamePane(Stage st) {
-		getStylesheets().add("file:styling/InGameStyle.css");
-		gaming.getStylesheets().add("file:styling/InGameStyle.css");
 		this.setCache(true);
 		sub = new SubScene(gaming, GameObject.SCREEN_WIDTH, GameObject.SCREEN_HEIGHT, true, SceneAntialiasing.BALANCED);
 		this.getChildren().add(sub);
@@ -98,9 +93,12 @@ public class InGamePane extends Pane{
         timeline.getKeyFrames().add(frame);
         gaming.setPickOnBounds(false);
 		gaming.getChildren().add(stage.getFlag().getTexture());
+		if (stage.getLauncher() != null) 
+			gaming.getChildren().addAll(stage.getLauncher().getTexture(), stage.getLauncher().getPlatform());
+			
 		gaming.getChildren().add(objects);
 		this.getChildren().add(tl);
-		this.setOnMousePressed(new FirstPoint(stage, drawer));
+		this.setOnMousePressed(new FirstPoint(stage));
 		this.setOnMouseDragged(new Dragging());
 		this.setOnMouseReleased(new LastPoint());
 		setSidePanel();
@@ -155,6 +153,7 @@ public class InGamePane extends Pane{
 		timeline.pause();
 		tl.pause();
 	}
+
 	
 	public void resume() {
 		gaming.setEffect(null);
@@ -165,7 +164,17 @@ public class InGamePane extends Pane{
 	}
 
 	public void launch() {
-		// TODO Auto-generated method stub
+	}
+	
+	public void startLaunchMode() {
+		mainBall.shape3D().setVisible(false);
+		timeline.pause();
+		drawer.setLauncher(mainBall);
+	}
+	
+	public void finishLaunchMode() {
+		mainBall.shape3D().setVisible(true);
+		timeline.play();
 		
 	}
 	
@@ -186,39 +195,18 @@ public class InGamePane extends Pane{
 		sp.addRow(0, rectBut);
 		sp.addRow(1, circBut);
 		
-		rectBut.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-			@Override
-			public void handle(MouseEvent arg0) {
-				drawer.setRect();
-			}
-			
-		}); 
+		rectBut.setOnAction(event -> drawer.setRect()); 
 		
-		circBut.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-			@Override
-			public void handle(MouseEvent arg0) {
-				drawer.setCirc();
-			}
-			
-		}); 
+		circBut.setOnAction(event -> drawer.setCirc()); 
 	}
 	
 	private void setMenuButton() {
-		this.getChildren().add(menuBut);
+		getChildren().add(menuBut);
 		
-		menuBut.relocate(GameObject.SCREEN_WIDTH-50, GameObject.SCREEN_HEIGHT-50);
+		menuBut.relocate(GameObject.SCREEN_WIDTH-80, GameObject.SCREEN_HEIGHT-80);
 		menuBut.setShape(new Circle());
 		menuBut.setId("menuBut");
-		menuBut.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-			@Override
-			public void handle(MouseEvent event) {
-				pause();
-			}
-			
-		});		
+		menuBut.setOnAction(event -> pause());		
 		
 	}
 	
@@ -263,5 +251,15 @@ public class InGamePane extends Pane{
 		}
 		
 	}
+	public void destroy () {
+		getChildren().clear();
+		WorldController.destroy();
+	}
+
+	public void rotateLauncher(float ang) {
+		stage.getLauncher().rotate(ang);
+	}
+
+
 
 }

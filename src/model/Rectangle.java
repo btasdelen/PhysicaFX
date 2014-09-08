@@ -40,7 +40,7 @@ public class Rectangle extends GameObject {
         fd.shape = rs;
         fd.density = 1f;
         fd.friction = 0.6f;
-        fd.restitution = .2f;
+        fd.restitution = 0;
 		body.createFixture(fd);
 		if (Settings.isGraphics3D()) {
 			shape3D = new javafx.scene.shape.Box(boxToJavaDistance(width), boxToJavaDistance(length), DEPTH);

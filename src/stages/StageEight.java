@@ -4,7 +4,6 @@
 package stages;
 
 import javafx.scene.paint.Color;
-
 import model.Circle;
 import model.Rectangle;
 
@@ -28,7 +27,11 @@ public class StageEight extends Stage {
 
 	public StageEight() {
 		super(new Vec2(25, 70));
-		
+
+	}
+	
+	@Override
+	public void setupStage() {
 		//setMainBallPos();
 		addMainBall();
 
@@ -43,10 +46,6 @@ public class StageEight extends Stage {
 		WorldController.addObject(cr);
 		WorldController.addObject(rect);
 		WorldController.addObject(rect2);
-
-
-
-
 
 	}
 	

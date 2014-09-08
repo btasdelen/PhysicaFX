@@ -85,10 +85,9 @@ public class InGameController implements EventHandler<ActionEvent> {
 		}
 		
 		// Checks if main ball captured by launcher
-		if(stage.haveLauncher() != null ) {
-				if(stage.haveLauncher().isCaptured(stage.getMainBall().getPos())){
-					scene.pause();
-					scene.launch();
+		if(stage.getLauncher() != null ) {
+				if(stage.getLauncher().isCaptured(stage.getMainBall().getPos())){
+					scene.startLaunchMode();
 				}
 		}
 		//update the time view

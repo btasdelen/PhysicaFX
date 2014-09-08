@@ -24,9 +24,7 @@ public class LastPoint implements EventHandler<MouseEvent> {
 			Drawer.draw();
 
 		}
-				
-		//panel.setShowNull();
-		
+						
 	}
 
 }

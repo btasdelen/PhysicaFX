@@ -15,7 +15,7 @@ public class FinishFlag extends GameObject {
 
 	private final ImageView iv = new ImageView("file:images/flag.png");
 	
-	public FinishFlag(Vec2 p) throws Exception {
+	public FinishFlag(Vec2 p) {
 		super(p, null, null);
 	}
 	

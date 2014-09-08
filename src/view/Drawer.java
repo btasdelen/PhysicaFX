@@ -4,13 +4,20 @@
 package view;
 
 import model.GameObject;
+import model.MainBall;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 
 import controller.WorldController;
 import javafx.geometry.Point2D;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
@@ -19,34 +26,56 @@ import javafx.scene.shape.Rectangle;
  *
  */
 public class Drawer {
+    public enum DrawType {
+        LAUNCHER, RECTANGLE, CIRCLE}
+    
+    private static DrawType dt;
+    private static MainBall mb;
 	
 	private static Point2D p2;
 	private static Point2D p1;
 	private static InGamePane scene;
 	private static Circle crc = new Circle(1, 1, 1);
 	private static Rectangle rect = new Rectangle(1, 1);
+	private static final Arc bar = new Arc();
+
 	private static double radius;
 	private static double width;
 	private static double height;
-	private static boolean isRect;
 	private static boolean isPaused;
-
+	
+	private static final Stop[] stops = new Stop[] { new Stop(0, Color.BLACK), new Stop(0.33, Color.RED), new Stop(0.66, Color.YELLOW), new Stop(1, Color.GREEN)};
+	private static RadialGradient rg;
 	public Drawer(InGamePane scn) {
 		scene = scn;
-		scene.objects.getChildren().addAll(crc, rect);
+		scene.objects.getChildren().addAll(crc, rect, bar);
 		crc.setVisible(false);
 		crc.setFill(Color.DARKRED);
 		rect.setVisible(false);
 		rect.setFill(Color.DARKRED);
-		isRect = true;
+		bar.setVisible(false);
+		bar.setType(ArcType.ROUND);
+		bar.setEffect(new DropShadow(5, 5, 5, Color.BLACK));
+
+		setRect();
+		isPaused = false;
 	}
 
 	public static void show() {
 		if (!isPaused) {
-			if (isRect)
+
+			switch (dt) {
+			case RECTANGLE: 
 				showRect();
-			else
+				break;
+			case CIRCLE:
 				showCirc();
+				break;
+			case LAUNCHER:
+				showLauncherBar();
+				break;
+
+			}
 		}
 	}
 	
@@ -75,6 +104,24 @@ public class Drawer {
 		crc.setRadius(radius);
 	}
 	
+	private static void showLauncherBar() {
+		if(!bar.isVisible())
+			bar.setVisible(true);
+		
+		rg = new RadialGradient(0, .1, p2.getX(), p2.getY(), p1.distance(p2), false, CycleMethod.NO_CYCLE, stops);
+
+		bar.setFill(rg);
+
+		bar.setCenterX(p2.getX());
+		bar.setCenterY(p2.getY());
+		bar.setRadiusX(p1.distance(p2));
+		bar.setRadiusY(p1.distance(p2));
+		bar.setLength(10);
+		bar.setStartAngle(Math.toDegrees(Math.PI - Math.atan2(p2.getY()-p1.getY(), p2.getX() - p1.getX())) - 5);
+		scene.rotateLauncher((float) (Math.toDegrees(Math.PI + Math.atan2(p2.getY()-p1.getY(), p2.getX() - p1.getX()))));
+		
+	}
+	
 	public static void setP1(Point2D pressed){
 		p1 = pressed;
 	}
@@ -86,10 +133,18 @@ public class Drawer {
 
 	public static void draw() {
 		if (!isPaused) {
-			if (isRect)
-				drawRect();
-			else
+			switch (dt) {
+			case CIRCLE:
 				drawCirc();
+				break;
+			case LAUNCHER:
+				launch();
+				break;
+			case RECTANGLE:
+				drawRect();
+				break;
+
+			}
 		}
 	}
 	
@@ -118,13 +173,25 @@ public class Drawer {
 	}
 
 	public void setRect() {
-		isRect = true;
+		dt = DrawType.RECTANGLE;
 	}
 	
 	public void setCirc() {
-		isRect = false;
+		dt = DrawType.CIRCLE;
+	}
+	
+	public void setLauncher(MainBall mb) {
+		Drawer.mb = mb;
+		dt = DrawType.LAUNCHER;
 	}
 
+	public static void launch() {
+		bar.setVisible(false);
+		mb.body.applyForceToCenter(new Vec2((float) (100*(p1.getX()-p2.getX())), (float) (-100*(p1.getY() - p2.getY()))));
+		dt = DrawType.RECTANGLE;
+		scene.finishLaunchMode();
+	}
+	
 	public void pause() {
 		isPaused = true;
 	}

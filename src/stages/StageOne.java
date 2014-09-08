@@ -29,7 +29,13 @@ public class StageOne extends Stage {
 
 	public StageOne() {
 		super(new Vec2(25, 70));
-		
+
+
+	}
+	
+	@Override
+	public void setupStage() {
+		super.setupStage();
 		addMainBall();
 
 		ff.setPos(new Vec2(85 , 57));
@@ -45,13 +51,6 @@ public class StageOne extends Stage {
 		WorldController.addObject(rect);
 		WorldController.addObject(rect2);
 		WorldController.addObject(rect3);
-
-
-
-
-
-
-
 	}
 	
 

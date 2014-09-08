@@ -20,19 +20,17 @@ public class Stage {
 	protected MainBall mb;
 	protected FinishFlag ff;
 	protected Vec2 mbPos;
-	protected Launcher haveLauncher;
+	protected Launcher launcher;
 
 
 	public Stage(Vec2 mbPos) {
-		world = new WorldController();
 		this.mbPos = mbPos;
+	}
+	
+	public void setupStage() {
+		world = new WorldController();
+		ff = new FinishFlag(new Vec2(0,0));
 
-		try {
-			ff = new FinishFlag(new Vec2(0,0));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 
 	}
@@ -78,8 +76,8 @@ public class Stage {
 	}
 	
 	
-	public Launcher haveLauncher() {
-		return haveLauncher;
+	public Launcher getLauncher() {
+		return launcher;
 	}
 	
 

@@ -3,11 +3,11 @@
  */
 package model;
 
-import java.awt.Toolkit;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.PhongMaterial;
+import javafx.stage.Screen;
 
 import org.jbox2d.collision.shapes.Shape;
 import org.jbox2d.common.Vec2;
@@ -30,8 +30,8 @@ public class GameObject implements Controllable{
     protected BodyType type;
     protected BodyDef bd = new BodyDef();
     public Body body;
-    public final static int SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
-    public final static int SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
+    public final static int SCREEN_WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
+    public final static int SCREEN_HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
     protected final static int RATIO = SCREEN_WIDTH;
 
 

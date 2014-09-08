@@ -29,6 +29,12 @@ public class StageFive extends Stage {
 	public StageFive() {
 		super(new Vec2(25, 70));
 		
+	}
+	
+	@Override
+	public void setupStage() {
+		super.setupStage();
+
 		//setMainBallPos();
 		addMainBall();
 
@@ -43,10 +49,6 @@ public class StageFive extends Stage {
 		WorldController.addObject(cr);
 		WorldController.addObject(rect);
 		WorldController.addObject(rect2);
-
-
-
-
 
 	}
 	

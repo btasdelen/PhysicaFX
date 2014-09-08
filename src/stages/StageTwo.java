@@ -4,7 +4,6 @@
 package stages;
 
 import javafx.scene.paint.Color;
-
 import model.Rectangle;
 
 import org.jbox2d.common.Vec2;
@@ -27,6 +26,12 @@ public class StageTwo extends Stage {
 	public StageTwo() {
 		super(new Vec2(20, 90));
 		
+
+	}
+	@Override
+	public void setupStage() {
+		super.setupStage();
+
 		addMainBall();
 
 		ff.setPos(new Vec2(83 ,56.5f));
@@ -41,6 +46,7 @@ public class StageTwo extends Stage {
 
 
 	}
+	
 	
 
 

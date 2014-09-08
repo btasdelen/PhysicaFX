@@ -42,8 +42,6 @@ public class Settings {
 	    	is3D = true;
 
 	    }
-		System.out.println(is3D);
-
 	}
 	
 	public static Font getFont() {
